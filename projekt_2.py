@@ -492,6 +492,7 @@ class Odprt_Valj(Valj):
                 return None,None
             normala = self.normala_na_plašču(prehod_B_S, rezultat2, središče, žarek)
             return rezultat2, normala
+            
         else:
             normala = self.normala_na_plašču(prehod_B_S, rezultat1, novo_središče, žarek)
             return rezultat1, normala
