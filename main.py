@@ -1,4 +1,4 @@
-from projekt_2 import *
+from raytracer import *
 
 width = 200
 height = 200
