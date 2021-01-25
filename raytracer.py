@@ -201,7 +201,8 @@ class Kamera:
         smer = žarek.smerni_vektor()
         disk = Ravnina(smer, self.točka, self.zaslonka, self.zaslonka, Barva(0,0,0))
         u, v = disk.vektorja_na_ravnini()
-        P = self.točka.vsota(smer.množenje_s_skalarjem(self.ostrina(žarek.točka.razdalja_med_krajevnima_vektorjema(žarek.kamera))))
+        # P = self.točka.vsota(smer.množenje_s_skalarjem(self.ostrina(žarek.točka.razdalja_med_krajevnima_vektorjema(žarek.kamera))))
+        P = self.gorišče(smer)
         nova_točka = self.premik_senzorja(u, v)
         return Žarek(nova_točka, P)
          
