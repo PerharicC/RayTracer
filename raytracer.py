@@ -380,7 +380,6 @@ class Ravnina:
         x = (točka.skalarni_produkt(normala) - kamera.skalarni_produkt(normala)) / skalarni
         u, v = self.vektorja_na_ravnini()
         kje_je_žarek = žarek.točka_na_žarku(x)
-        razdalja_do_središča = kje_je_žarek.razdalja_med_krajevnima_vektorjema(točka)
         projekcija_u = abs(kje_je_žarek.razlika(točka).skalarni_produkt(u))
         projekcija_v = abs(točka.razlika(kje_je_žarek).skalarni_produkt(v))
         if (projekcija_u > širina / 2) or (projekcija_v > višina / 2):
