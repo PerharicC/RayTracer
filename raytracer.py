@@ -209,10 +209,11 @@ class Kamera:
 class Krogla:
     """Predmet, katerega vse točke so za konstanten radij oddaljene od središča."""
 
-    def __init__(self, središče, radij, material):
+    def __init__(self, središče, radij, material, zasenči = True):
         self.središče = središče
         self.radij = radij
         self.material = material
+        self.zasenči = zasenči
     
     def __str__(self):
         return "Krogla s središčem v S{} in radijem {}".format(self.središče, self.radij)
@@ -340,6 +341,8 @@ class Render:
         for predmetek in predmeti:
             if predmetek == predmet:
                 continue
+            if predmetek.zasenči is False:
+                continue
             if type(predmetek) is Valj or type(predmetek) is Odprt_Valj or type(predmetek) is Stožec:
                 razdalja, normala = predmetek.zadetek(žarek)
             else:
@@ -352,12 +355,13 @@ class Render:
 
 class Ravnina:
 
-    def __init__(self, normala, točka, širina, višina, material):
+    def __init__(self, normala, točka, širina, višina, material, zasenči = True):
         self.normala = normala.enotski_vektor()
         self.točka = točka
         self.širina = širina
         self.višina = višina
         self.material = material
+        self.zasenči = zasenči
     
     def __str__(self):
         return "Ravnina z normalo {} in točko na ravnini {}.".format(self.normala, self.točka)
@@ -454,12 +458,13 @@ def inverz(A): #inverz matrike A
 class Valj:
     """Predmet sestavljen iz plašča, kjer so vse točke od njegove osi enako oddaljene za radij, in dveh enakih krogov na koncih valja."""
 
-    def __init__(self, točka, normala, radij, višina, material):
+    def __init__(self, točka, normala, radij, višina, material, zasenči = True):
         self.točka = točka
         self.radij = radij
         self.višina = višina
         self.normala = normala.enotski_vektor()
         self.material = material
+        self.zasenči = zasenči
     
     def zadetek(self, žarek):
         kamera, smer, točka, višina, radij, normala = žarek.kamera, žarek.smerni_vektor(), self.točka, self.višina, self.radij, self.normala

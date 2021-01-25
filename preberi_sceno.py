@@ -54,12 +54,12 @@ def ravnina(slovar):
     pozicija = vnesi_podatke(pozicija, "vektor")
     normala = slovar["normala"]
     normala = vnesi_podatke(normala, "vektor")
-    return Ravnina(normala, pozicija, slovar["sirina"], slovar["visina"], material(slovar["material"]))
+    return Ravnina(normala, pozicija, slovar["sirina"], slovar["visina"], material(slovar["material"]), slovar["senca"])
 
 def krogla(slovar):
     središče = slovar["sredisce"]
     središče = vnesi_podatke(središče, "vektor")
-    return Krogla(središče, slovar["radij"], material(slovar["material"]))
+    return Krogla(središče, slovar["radij"], material(slovar["material"]), slovar["senca"])
 
 def valj(slovar, tip):
     pozicija = slovar["pozicija"]
@@ -67,10 +67,10 @@ def valj(slovar, tip):
     normala = slovar["normala"]
     normala = vnesi_podatke(normala, "vektor")
     if tip == "valj":
-        return Valj(pozicija, normala, slovar["radij"], slovar["visina"], material(slovar["material"]))
+        return Valj(pozicija, normala, slovar["radij"], slovar["visina"], material(slovar["material"]), slovar["senca"])
     elif tip == "odprt valj":
-        return Odprt_Valj(pozicija, normala, slovar["radij"], slovar["visina"], material(slovar["material"]))
-    return Stožec(pozicija, normala, slovar["radij"], slovar["visina"], material(slovar["material"]))
+        return Odprt_Valj(pozicija, normala, slovar["radij"], slovar["visina"], material(slovar["material"]), slovar["senca"])
+    return Stožec(pozicija, normala, slovar["radij"], slovar["visina"], material(slovar["material"]), slovar["senca"])
 
 def scena(datoteka):
     slovar = json.loads(open(datoteka, "r").read())
