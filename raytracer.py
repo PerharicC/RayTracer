@@ -109,9 +109,9 @@ def anti_aliasing(matrika):
     H = len(matrika)
     W = len(matrika[0])
     nova_matrika= vsi_piksli(W // 2, H // 2)
-    k=0
+    k = 0
     for i in range(0, H, 2):
-        l=0
+        l = 0
         for j in range(0, W, 2):
             a = matrika[i][j]
             b = matrika[i][j + 1]
@@ -137,11 +137,13 @@ def ustvari_datoteko(datoteka, scena, piksli, AA):
         piksli = anti_aliasing(piksli)
     f = open(datoteka, "w")
     f.write("P3 {0} {1}\n255\n".format(W, H))
-    print("writing to file")
+    k=1
     for i in piksli:
         for j in i:
             piksel = j.naredi_piksel()
             f.write("{0} {1} {2} ".format(int(piksel.R), int(piksel.G),int(piksel.B)))
+        print("writing to file {:3.0f}%".format(k * 100 / H), end = "\r")
+        k += 1
         f.write("\n")
     f.close()
 
