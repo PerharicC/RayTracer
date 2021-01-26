@@ -1,0 +1,11 @@
+{"kamera": {"pozicija":[0,-0.3,-1],"goriscna razdalja": 4.2, "zaslonka": 0.2},
+	"sirina": 500,
+	"visina": 500, 
+	"predmeti": {"ravnina1": {"normala" : [-1, -1, -1], "pozicija": [-0.5, 0.2, 1], "sirina":0.5,"visina": 1, "material":{"barva":[1,0,1], "ambientalna barva": [0,0,0.02], "zrcaljenje":[1,1,1], "sijaj":20, "odsev":0.5}, "senca": true},
+            	"krogla3":{"sredisce": [-0.75, 1000, 2.25], "radij":999, "material":{"barva":[0.7, 0.2, 0.2], "ambientalna barva":[0.01, 0.01, 0.02],"zrcaljenje":[0, 0, 0], "sijaj":0, "odsev":0.7}, "senca": false},
+            	"odprt valj1": {"pozicija":[0.75, -1, 1], "normala":[1, 1, 1], "radij":1, "visina":1.5, "material":{"barva":[0.3,1,0.6], "ambientalna barva": [0.2,0.2,0.02], "zrcaljenje":[0.7,0.7,0.3], "sijaj":30, "odsev":0.4}, "senca":true},
+            	"stozec1": {"pozicija":[-0.9, -1, 3], "normala":[-1,1,1], "radij":0.8, "visina":2, "material":{"barva":[0.3,0.2,0.3], "ambientalna barva": [0,0,0.02], "zrcaljenje":[0.3,0,0.1], "sijaj": 10,"odsev": 1}, "senca":true}},
+	"luci":{"luc1": {"pozicija":[1.5, -10, -10],"material":{"barva":[1, 1, 1], "zrcaljenje":[1,1,1]}},
+        	"luc2": {"pozicija":[-0.5, -10.5, 5],"material":{"barva":[1, 1, 1], "ambientalna barva" : [0,0,0.05], "zrcaljenje":[1,1,1]}}},
+	"stevilo odbojev": 3,
+	"anti aliasing": true}

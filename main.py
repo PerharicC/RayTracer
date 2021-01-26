@@ -3,7 +3,7 @@ from raytracer import *
 from prikaz_slike import odpri
 from preberi_sceno import scena
 
-scene, odboj, AA = scena("scena_2.txt")
+scene, odboj, AA = scena("scena_3.txt")
 rendaj = Render()
 slika = rendaj.zrendaj(scene, odboj)
 ustvari_datoteko("test.ppm", scene, slika, AA)

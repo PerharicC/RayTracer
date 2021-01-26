@@ -47,7 +47,6 @@ class Vektor:
     def vektorski_produkt(self, other):
         return Vektor(self.y * other.z - self.z * other.y, self.z * other.x - self.x * other.z, self.x * other.y - self.y * other.x)
 
-
 class Scena:
     """Vsebuje vse podatke, ki opisujejo prostor-sceno."""
 
@@ -60,7 +59,6 @@ class Scena:
     
     def __str__(self):
         return "Scena s kamero v točki {}, z zaslonom velikosti ({} × {})".format(self.kamera.točka, self.širina, self.višina)
-
 
 def vsi_piksli(širina, višina): #naredi matriko v velikosti zaslona
     piksli = []
@@ -106,12 +104,10 @@ class Barva:
     
     def množenje_po_komponentah(self, other):
         return Barva(self.R * other.R, self.G * other.G, self.B * other.B)
-    
 
 def anti_aliasing(matrika):
     H = len(matrika)
     W = len(matrika[0])
-    print(W,H)
     nova_matrika= vsi_piksli(W // 2, H // 2)
     k=0
     for i in range(0, H, 2):
@@ -128,6 +124,7 @@ def anti_aliasing(matrika):
             
             nova_matrika[k][l] = povprečje_piksla(a, b, c, d)
             l += 1
+        print("anti aliasing {:3.0f}%".format(i * 100 / H), end = "\r")
         k += 1
     return nova_matrika
 
@@ -140,13 +137,13 @@ def ustvari_datoteko(datoteka, scena, piksli, AA):
         piksli = anti_aliasing(piksli)
     f = open(datoteka, "w")
     f.write("P3 {0} {1}\n255\n".format(W, H))
+    print("writing to file")
     for i in piksli:
         for j in i:
             piksel = j.naredi_piksel()
             f.write("{0} {1} {2} ".format(int(piksel.R), int(piksel.G),int(piksel.B)))
         f.write("\n")
     f.close()
-
 
 def kvadratna_enačba(a, b, c):
     Diskriminanta = b ** 2 - 4 * a * c
@@ -206,15 +203,7 @@ class Kamera:
         return self.točka.vsota(smer.množenje_s_skalarjem(self.goriščna_razdalja))
 
     def ostrina(self, razdalja):
-        return (1 / self.goriščna_razdalja - 1 / razdalja) ** (-1)
-    
-    # def rotacija(self, a, b, y, gorišče):
-    #     rotacijska_matrika = [[cos(a) * cos(b), cos(a) * sin(b) * sin(y) - sin(a) * cos(y), cos(a) * sin(b) * cos(y) + sin(a) * sin(y)],
-    #     [sin(a) * cos(b), sin(a) * sin(b) * sin(y) - cos(a) * cos(y), sin(a) * sin(b) * cos(y) + cos(a) * sin(y)],
-    #     [-sin(b), cos(b) * sin(y), cos(b) * sin(y)]]
-    #     translacija = self.točka.razlika(gorišče)
-    #     rot = množenje_matrik(rotacijska_matrika, translacija)
-    #     return rot.vsota(gorišče)
+        return (1 / self.goriščna_razdalja + 1 / razdalja) ** (-1)
     
     def premik_senzorja(self, u, v):
         premik_u = self.zaslonka / 2 * uniform(-1, 1)
@@ -232,7 +221,6 @@ class Kamera:
         P = self.gorišče(smer)
         nova_točka = self.premik_senzorja(u, v)
         return Žarek(nova_točka, P)
-         
 
 class Krogla:
     """Predmet, katerega vse točke so za konstanten radij oddaljene od središča."""
@@ -258,7 +246,6 @@ class Krogla:
     def normala(self, točka):
         return točka.razlika(self.središče).enotski_vektor()
 
-
 class Render:
     """Požene raytracing."""
 
@@ -275,26 +262,22 @@ class Render:
             y = Y[j]
             for i in range(len(X)):
                 x = X[i]
-                # piksli[j][i] = self.poišči_zamegltiev(Vektor(x, y), scena, število_odbojev)
                 žarek = Žarek(kamera = Kamera.točka, točka = Vektor(x, y))
                 žarek_2 = Kamera.senzor(žarek)
                 piksli[j][i] = self.poišči_predmet(žarek_2, scena, število_odbojev)
-            print("{:3.0f}%".format(j * 100 / H), end = "\r")
+                # piksli[j][i] = self.poišči_zamegltiev(žarek, scena, število_odbojev)
+            print("rendering {:3.0f}%".format(j * 100 / H), end = "\r")
         return piksli
     
-    # def poišči_zamegltiev(self, točka, scena, število_odbojev):
-    #     kamera = scena.kamera
-    #     alfa=uniform(-0.0001, 0.0001)
-    #     beta=uniform(-0.0001, 0.0001)
-    #     gama=uniform(-0.0001, 0.0001)
-    #     žarek = Žarek(kamera.točka, točka)
-    #     smer = žarek.smerni_vektor()
-    #     gorišče = kamera.gorišče(smer)
-    #     nova_kamera = kamera.rotacija(alfa, beta, gama, gorišče)
-    #     žarek = Žarek(nova_kamera, gorišče)
-    #     return self.poišči_predmet(žarek, scena, število_odbojev)
-
-
+    def poišči_zamegltiev(self, žarek, scena, število_odbojev): #Dof s povprečenjem večih žarkov isti output vendar dosti dlje
+        Kamera = scena.kamera
+        barva = Barva(0,0,0)
+        for i in range(4):
+            novi_žarek = Kamera.senzor(žarek)
+            ena_barva =self.poišči_predmet(novi_žarek, scena, število_odbojev) 
+            barva = barva.vsota_dveh_barv(ena_barva)
+        return barva.množenje_barve(0.25)
+    
     def poišči_predmet(self, žarek, scena, število_odbojev): #Poišče najbližji predmet kameri in vrne njegovo barvo na tem mestu
         iskana_barva = Barva(0, 0, 0)
         razdalja_min = None
@@ -317,8 +300,6 @@ class Render:
             normala = predmet_min.normala(točka_zadetka)
         elif type(predmet_min) is Ravnina:
             normala = predmet_min.normala
-        else:
-            normala = normala
         iskana_barva = self.poišči_barvo(predmet_min.material, točka_zadetka, normala, scena, predmet_min)
         odsev = predmet_min.material.odsev
         if število_odbojev == 0:
@@ -378,9 +359,7 @@ class Render:
         if (razdalja is None) or (razdalja >= razdalja_do_luči):
             return None
         return True
-            
-            
-
+         
 class Ravnina:
 
     def __init__(self, normala, točka, širina, višina, material, zasenči = True):
@@ -430,7 +409,6 @@ def katero_komponento_si_zmisli(normala, d):
                 z = (d - normala.x - normala.y) / normala.z
             return x, y, z
 
-
 class Točkasta_luč:
     """Luč, ki jo obravnavmao kot točkast izvor svetlobe z določeno barvo."""
 
@@ -440,17 +418,7 @@ class Točkasta_luč:
     
     def __str__(self):
         return "Točkasta luč na mestu {0} z barvo {1}.".format(self.točka, self.material.barva)
-    
-class Ravninska_luč:
 
-    def __init__(self, ravnina, barva, moč=1.0):
-        self.ravnina = ravnina
-        self.barva = barva
-        self.moč = moč
-    
-    def __str__(self):
-        return "Ravninska luč na ravnini ({0}), z barvo ({1}) in {2} % močjo.".format(self.ravnina, self.barva, self.moč * 100)
-    
 class Material:
 
     def __init__(self, barva, prostorska_osvetlitev, zrcaljenje, koeficient_sijaja = 0.0, odsev = 0.0):
@@ -622,7 +590,7 @@ class Stožec(Valj):
         z = sqrt(točka_zadetka.y ** 2 + točka_zadetka.x ** 2)
         normala = Vektor(x, y, z).enotski_vektor()
         orig_normala = množenje_matrik(matrika, normala).enotski_vektor()
-        return orig_normala
+        return orig_normala.množenje_s_skalarjem(-1)
     
     def osnovna_ploskev(self, središče, kamera, smer):
         normala = Vektor(0,0,1)
@@ -633,9 +601,3 @@ class Stožec(Valj):
                 if točka_zadetka.razdalja_med_krajevnima_vektorjema(središče) <= self.radij:
                     return x, self.normala.množenje_s_skalarjem(-1)
         return None, None
-
-
-    
-
-
-    

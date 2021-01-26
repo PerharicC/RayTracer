@@ -73,8 +73,12 @@ def valj(slovar, tip):
     return Stožec(pozicija, normala, slovar["radij"], slovar["visina"], material(slovar["material"]), slovar["senca"])
 
 def scena(datoteka):
+    print("reading scene")
     slovar = json.loads(open(datoteka, "r").read())
     kam = kamera(slovar["kamera"])
+    print("\t" +"camera")
     objekti = predmeti(slovar["predmeti"])
+    print("\tgeometry")
     lučke = luči(slovar["luci"])
+    print("\tlights")
     return Scena(kam, lučke, objekti, slovar["sirina"], slovar["visina"]), slovar["stevilo odbojev"], slovar["anti aliasing"]
