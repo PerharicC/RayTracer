@@ -49,7 +49,7 @@ class Vektor:
 
 
 class Scena:
-    """Vsebuje vse podatke, ki opisujejo prosto-sceno."""
+    """Vsebuje vse podatke, ki opisujejo prostor-sceno."""
 
     def __init__(self, kamera, luči, predmeti, širina, višina):
         self.kamera = kamera
@@ -59,7 +59,7 @@ class Scena:
         self.višina = višina
     
     def __str__(self):
-        return "Scena s kamero v točki {}, z zaslonom velikosti ({} × {})".format(self.kamera, self.širina, self.višina)
+        return "Scena s kamero v točki {}, z zaslonom velikosti ({} × {})".format(self.kamera.točka, self.širina, self.višina)
 
 
 def vsi_piksli(širina, višina): #naredi matriko v velikosti zaslona
@@ -108,9 +108,36 @@ class Barva:
         return Barva(self.R * other.R, self.G * other.G, self.B * other.B)
     
 
-def ustvari_datoteko(datoteka, scena, piksli):
+def anti_aliasing(matrika):
+    H = len(matrika)
+    W = len(matrika[0])
+    print(W,H)
+    nova_matrika= vsi_piksli(W // 2, H // 2)
+    k=0
+    for i in range(0, H, 2):
+        l=0
+        for j in range(0, W, 2):
+            a = matrika[i][j]
+            b = matrika[i][j + 1]
+            c = matrika[i + 1][j]
+            d = matrika[i + 1][j + 1]
+
+            def povprečje_piksla(a, b, c, d):
+                vsota = a.vsota_dveh_barv(b.vsota_dveh_barv(c.vsota_dveh_barv(d)))
+                return vsota.množenje_barve(0.25)
+            
+            nova_matrika[k][l] = povprečje_piksla(a, b, c, d)
+            l += 1
+        k += 1
+    return nova_matrika
+
+def ustvari_datoteko(datoteka, scena, piksli, AA):
     W = scena.širina
     H = scena.višina
+    if AA:
+        W = W // 2
+        H = H // 2
+        piksli = anti_aliasing(piksli)
     f = open(datoteka, "w")
     f.write("P3 {0} {1}\n255\n".format(W, H))
     for i in piksli:

@@ -77,4 +77,4 @@ def scena(datoteka):
     kam = kamera(slovar["kamera"])
     objekti = predmeti(slovar["predmeti"])
     lučke = luči(slovar["luci"])
-    return Scena(kam, lučke, objekti, slovar["sirina"], slovar["visina"]), slovar["stevilo odbojev"]
+    return Scena(kam, lučke, objekti, slovar["sirina"], slovar["visina"]), slovar["stevilo odbojev"], slovar["anti aliasing"]
