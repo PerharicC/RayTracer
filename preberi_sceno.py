@@ -20,10 +20,10 @@ def material(slovar):
 
 def vnesi_podatke(seznam, razred):
     if razred == "barva":
-        return Barva(seznam[0], seznam[1], seznam[2])
+        return Barva(*seznam)
     elif razred == "vektor":
-        return Vektor(seznam[0], seznam[1], seznam[2])
-    return Material(seznam[0], seznam[1], seznam[2], seznam[3], seznam[4])
+        return Vektor(*seznam)
+    return Material(*seznam)
 
 def kamera(slovar):
     pozicija= slovar["pozicija"]
@@ -82,3 +82,4 @@ def scena(datoteka):
     lučke = luči(slovar["luci"])
     print("\tlights")
     return Scena(kam, lučke, objekti, slovar["sirina"], slovar["visina"]), slovar["stevilo odbojev"], slovar["anti aliasing"]
+
