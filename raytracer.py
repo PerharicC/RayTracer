@@ -14,10 +14,10 @@ class Vektor:
         self.z = z
     
     def __str__(self):
-        return "({0}, {1}, {2})".format(self.x, self.y, self.z)
+        return "Vektor (x = {0}, y = {1}, z = {2})".format(self.x, self.y, self.z)
     
     def __repr__(self):
-        return "({0}, {1}, {2})".format(self.x, self.y, self.z)
+        return "Vektor ({0}, {1}, {2})".format(self.x, self.y, self.z)
     
     def skalarni_produkt(self, other):
         return self.x * other.x + self.y * other.y + self.z * other.z
@@ -60,7 +60,9 @@ class Scena:
     def __str__(self):
         return "Scena s kamero v točki {}, z zaslonom velikosti ({} × {})".format(self.kamera.točka, self.širina, self.višina)
 
-def vsi_piksli(širina, višina): #naredi matriko v velikosti zaslona
+def vsi_piksli(širina, višina):
+    """Naredi matriko v velikosti zaslona"""
+    
     piksli = []
     for j in range(višina):
         vrstica = []
@@ -78,10 +80,10 @@ class Barva:
         self.B = B
     
     def __str__(self):
-        return "({0}, {1}, {2})".format(self.R, self.G, self.B)
+        return "Barva (R = {0}, G = {1}, B = {2})".format(self.R, self.G, self.B)
     
     def __repr__(self):
-        return "({0}, {1}, {2})".format(self.R, self.G, self.B)
+        return "Barva ({0}, {1}, {2})".format(self.R, self.G, self.B)
     
     def naredi_piksel(self):
 
@@ -185,6 +187,9 @@ class Žarek:
     def __str__(self):
         return "Žarek z enačbo {} + {} * t".format(self.kamera, self.smerni_vektor())
     
+    def __repr__(self):
+        return "Žarek ({}, {})".format(self.kamera, self.točka)
+    
     def smerni_vektor(self):
         smer = self.točka.razlika(self.kamera)
         return smer.enotski_vektor()
@@ -195,11 +200,18 @@ class Žarek:
         return self.kamera.vsota(premik)
 
 class Kamera:
+    """Kamera, ki ima podano pozicijo v prostoru, zaslonko in goriščno razdaljo)"""
 
     def __init__(self, točka, goriščna_razdalja = 0.0, zaslonka = 0.0):
         self.točka = točka
         self.goriščna_razdalja = goriščna_razdalja
         self.zaslonka = zaslonka
+    
+    def __str(self):
+        return "Kamera v točki {0}, z goriščno razdaljo {1} in zaslonko {}.".format(self.točka, self.goriščna_razdalja, self.zaslonka)
+    
+    def __repr__(self):
+        return "Kamera ({0}, {1}, {2})".format(self.točka, self.goriščna_razdalja, self.zaslonka)
     
     def gorišče(self, smer):
         return self.točka.vsota(smer.množenje_s_skalarjem(self.goriščna_razdalja))
@@ -235,6 +247,9 @@ class Krogla:
     
     def __str__(self):
         return "Krogla s središčem v S{} in radijem {}".format(self.središče, self.radij)
+    
+    def __repr__(self):
+        return "Krogla({}, {}, {}, {})".format(self.središče, self.radij, self.material, self.zasenči)
     
     def zadetek(self, žarek):
         d = žarek.smerni_vektor()
@@ -280,7 +295,9 @@ class Render:
             barva = barva.vsota_dveh_barv(ena_barva)
         return barva.množenje_barve(0.25)
     
-    def poišči_predmet(self, žarek, scena, število_odbojev): #Poišče najbližji predmet kameri in vrne njegovo barvo na tem mestu
+    def poišči_predmet(self, žarek, scena, število_odbojev):
+        """Poišče najbližji predmet kameri in vrne njegovo barvo na tem mestu"""
+        
         iskana_barva = Barva(0, 0, 0)
         razdalja_min = None
         predmet_min = None
@@ -363,6 +380,7 @@ class Render:
         return True
          
 class Ravnina:
+    """Pravokotnik v prostoru"""
 
     def __init__(self, normala, točka, širina, višina, material, zasenči = True):
         self.normala = normala.enotski_vektor()
@@ -374,6 +392,9 @@ class Ravnina:
     
     def __str__(self):
         return "Ravnina z normalo {} in točko na ravnini {}.".format(self.normala, self.točka)
+    
+    def __repr__(self):
+        return "Ravnina({}, {}, {}, {}, {}, {})".format(self.normala, self.točka, self.širina, self.višina, self.material, self.zasenči)
 
     def vektorja_na_ravnini(self):
         #Vektor u
@@ -420,6 +441,9 @@ class Točkasta_luč:
     
     def __str__(self):
         return "Točkasta luč na mestu {0} z barvo {1}.".format(self.točka, self.material.barva)
+    
+    def __repr__(self):
+        return "Točkasta_luč ({}, {})".format(self.točka, self.material)
 
 class Material:
 
@@ -429,6 +453,9 @@ class Material:
         self.zrcaljenje = zrcaljenje
         self.koeficient_sijaja = koeficient_sijaja
         self.odsev = odsev
+    
+    def __repr__(self):
+        return "Material({}, {}, {}, {}, {})".format(self.barva, self.prostorska_osvetlitev, self.zrcaljenje, self.koeficient_sijaja, self.odsev)
 
 def množenje_matrik(A, B):
     B = [[B.x], [B.y], [B.z]]
@@ -443,7 +470,9 @@ def množenje_matrik(A, B):
                 A_B[i_1][j_2] = x
         return Vektor(A_B[0][0], A_B[1][0], A_B[2][0])
 
-def inverz(A): #inverz matrike A
+def inverz(A): 
+    """Inverz matrike A"""
+
     A = inv(array(A))
     B = []
     for vrstica in A:
@@ -464,6 +493,9 @@ class Valj:
         self.material = material
         self.zasenči = zasenči
     
+    def __repr__(self):
+        return "Valj({}, {}, {}, {}, {}, {})".format(self.točka, self.normala, self.radij, self.višina, self.material, self.zasenči)
+
     def zadetek(self, žarek):
         kamera, smer, točka, višina, radij, normala = žarek.kamera, žarek.smerni_vektor(), self.točka, self.višina, self.radij, self.normala
         u, v = self.vektor_na_osnovni_ploskvi()
@@ -556,6 +588,7 @@ class Odprt_Valj(Valj):
             return rezultat1, normala
 
 class Stožec(Valj):
+    """Enak predmet kot valj, le da se mu radij z višino manjša"""
 
     def zadetek(self, žarek):
         kamera, smer, točka, višina, radij, normala = žarek.kamera, žarek.smerni_vektor(), self.točka, self.višina, self.radij, self.normala
