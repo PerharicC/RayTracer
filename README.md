@@ -58,7 +58,8 @@ Uporabnik naj naredi JSON tekstovno datoteko, v katero naj kot v python slovar z
     scena = {
         "kamera" : {"pozicija" : [x, y, z],
                     "goriscna razdalja" : float,
-                    "zaslonka" : float},
+                    "zaslonka" : float,
+                    "stevilo zarkov" : int,
         "sirina" : int,
         "visina" : int,
         "predmeti" : {"ravnina1" :
@@ -89,6 +90,8 @@ Uporabnik naj naredi JSON tekstovno datoteko, v katero naj kot v python slovar z
 ```
 Število odbojev je globina rekurzije za določitev odbojev od predmeta. Senca pa je lastnost telesa, da predstavlja senco drugem telesu.
 
+Število žarkov je "globina" za DoF, večje kot je to število lepša zameglitev bo na sliki, a **pozor**, s tem se bo izjemno povečal tudi čas izvajanja programa.
+
 Za materiale je potrebno določiti naslednje lastnosti (RGB so po vrsti rdeča, zelena in modra barva):
 
 ```python
@@ -104,6 +107,7 @@ ___
 ![1b](slike/AA.jpg "anti aliasing")
 ![1c](slike/ravnina_odprti_valj.jpg "anti aliasing")
 ![1d](slike/nodof.jpg "brez DoF")
+![1e](slike/bestdof.jpg "visok DoF")
 
 ___
 

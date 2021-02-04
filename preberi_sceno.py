@@ -28,7 +28,7 @@ def vnesi_podatke(seznam, razred):
 def kamera(slovar):
     pozicija= slovar["pozicija"]
     pozicija = vnesi_podatke(pozicija, "vektor")
-    return Kamera(pozicija, slovar["goriscna razdalja"], slovar["zaslonka"])
+    return Kamera(pozicija, slovar["goriscna razdalja"], slovar["zaslonka"], slovar["stevilo zarkov"])
 
 def luči(slovar):
     slovar_luči = {}

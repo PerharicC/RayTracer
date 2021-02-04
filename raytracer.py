@@ -202,10 +202,11 @@ class Žarek:
 class Kamera:
     """Kamera, ki ima podano pozicijo v prostoru, zaslonko in goriščno razdaljo)"""
 
-    def __init__(self, točka, goriščna_razdalja = 0.0, zaslonka = 0.0):
+    def __init__(self, točka, goriščna_razdalja = 0.0, zaslonka = 0.0, število_žarkov = 1):
         self.točka = točka
         self.goriščna_razdalja = goriščna_razdalja
         self.zaslonka = zaslonka
+        self.število_žarkov = število_žarkov
     
     def __str(self):
         return "Kamera v točki {0}, z goriščno razdaljo {1} in zaslonko {}.".format(self.točka, self.goriščna_razdalja, self.zaslonka)
@@ -280,20 +281,20 @@ class Render:
             for i in range(len(X)):
                 x = X[i]
                 žarek = Žarek(kamera = Kamera.točka, točka = Vektor(x, y))
-                žarek_2 = Kamera.senzor(žarek)
-                piksli[j][i] = self.poišči_predmet(žarek_2, scena, število_odbojev)
-                # piksli[j][i] = self.poišči_zamegltiev(žarek, scena, število_odbojev)
+                piksli[j][i] = self.poišči_zamegltiev(žarek, scena, število_odbojev, Kamera.število_žarkov)
             print("rendering {:3.0f}%".format(j * 100 / H), end = "\r")
         return piksli
     
-    def poišči_zamegltiev(self, žarek, scena, število_odbojev): #Dof s povprečenjem večih žarkov isti output vendar dosti dlje
+    def poišči_zamegltiev(self, žarek, scena, število_odbojev, število_žarkov):
+        """Dof"""
+
         Kamera = scena.kamera
         barva = Barva(0,0,0)
-        for i in range(4):
+        for i in range(število_žarkov):
             novi_žarek = Kamera.senzor(žarek)
             ena_barva =self.poišči_predmet(novi_žarek, scena, število_odbojev) 
             barva = barva.vsota_dveh_barv(ena_barva)
-        return barva.množenje_barve(0.25)
+        return barva.množenje_barve(1 / število_žarkov)
     
     def poišči_predmet(self, žarek, scena, število_odbojev):
         """Poišče najbližji predmet kameri in vrne njegovo barvo na tem mestu"""
