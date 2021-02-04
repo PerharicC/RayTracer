@@ -1,11 +1,13 @@
 import os
+import sys
 from raytracer import *
 from prikaz_slike import odpri
 from preberi_sceno import scena
 
-scene, odboj, AA = scena("scena_3.txt")
+datoteka_scena, datoteka_zapis = sys.argv[1:]
+scene, odboj, AA = scena(datoteka_scena)
 rendaj = Render()
 slika = rendaj.zrendaj(scene, odboj)
-ustvari_datoteko("test.ppm", scene, slika, AA)
-odpri("test.ppm")
-os.remove("test.ppm")
+ustvari_datoteko(datoteka_zapis, scene, slika, AA)
+odpri(datoteka_zapis)
+os.remove(datoteka_zapis)
