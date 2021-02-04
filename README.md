@@ -99,6 +99,9 @@ material = {"barva" : [R, G, B], "ambientalna barva" = [R, G, B], "zrcaljenje" :
 ```
 Material luči nima lastnosti ```"sijaj" ``` in ```"odsev"```. Če kakšna lastnost manjka, bo v primeru, da je lastnost seznam [R, G, B] predvidena vrednost enaka [0, 0, 0] oz v primeru številke enaka 0.0.
 
+Za **zagon** programa, naj uporabnik v ukazni vrstici požene ukaz
+
+`python main.py ime_datoteke_scene ime_izhodne_datoteke_slike`
 ___
 
 ## Nekaj slik
